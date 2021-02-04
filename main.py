@@ -28,23 +28,20 @@ while (loop != 2):
 
                 answer = input("Do you want to change something ?")
                 if answer == "yes":
+                    lo = open('misc.txt', 'w')
                     location = input("What is the location ? : ")
-            f = open('data.txt', 'a')
-            f.write("\n")
-            f.write(location)
-            f.write("\n")
-            leftovers = input("\nIs there any leftovers ? : ")
-            f.write(leftovers)
-            f.write("\n")
-            f.close()
-
-
-
+                    lo.write(location)
+                    lo.write("\n")
+                    leftovers = input("Is there any leftovers ? : ")
+                    lo.write(leftovers)
+                    lo.close()
         os.system('cls')
         while changepass != "Yes" or changepass != "No":
             changepass = input("Do you want to change your password ? : (Yes/No) ")
             if changepass == "Yes":
                 password = input("Type your new password : ")
+                f = f = open('data.txt', 'w')
+                f.write(password)
                 sys.exit()
             elif changepass == "No":
                 loop = 2
