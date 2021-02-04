@@ -15,23 +15,28 @@ while (loop != 2):
 
     # aks the user the secret phrase to access if it's the first time skip this step
         while (trypass != login) :
-            trypass = input("Enter your password :\n")
-
-
+            trypass = input("Enter your password : ")
             if (trypass != login):
                 print("Incorrect !")
+
             else :
                 print("Correct !")
-        f.close()
-        location = input("What is the location ? : ")
-        f = open('data.txt', 'a')
-        f.write("\n")
-        f.write(location)
-        f.write("\n")
-        leftovers = input("\nIs there any leftovers ? : ")
-        f.write(leftovers)
-        f.write("\n")
-        f.close()
+                os.system('cls')
+                lo = open('misc.txt', 'r')
+                locshow = lo.readlines()
+                print(locshow)
+
+                answer = input("Do you want to change something ?")
+                if answer == "yes":
+                    location = input("What is the location ? : ")
+            f = open('data.txt', 'a')
+            f.write("\n")
+            f.write(location)
+            f.write("\n")
+            leftovers = input("\nIs there any leftovers ? : ")
+            f.write(leftovers)
+            f.write("\n")
+            f.close()
 
 
 
@@ -45,11 +50,18 @@ while (loop != 2):
                 loop = 2
                 sys.exit()
 
-    else :
+    else:
         login = input("pswrd")
-        f = open('data.txt', 'a')
+        f = open('data.txt', 'w')
         f.write(login)
-
         f.close()
+        lo = open('misc.txt', 'a')
+        location = input("What is the location ? : ")
+        lo.write(location)
+        lo.write("\n")
+        leftovers = input("\nIs there any leftovers ? : ")
+        lo.write(leftovers)
+        lo.write("\n")
+        lo.close()
 
 
