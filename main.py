@@ -1,6 +1,14 @@
 import sys
 import os
 
+def changeLoc(location, leftovers):
+        lo = open('misc.txt', 'a')
+        lo.write(location)
+        lo.write("\n")
+        lo.write(leftovers)
+        lo.write("\n")
+        lo.close()
+
 # initialzing
 correct = False
 loop = 0
@@ -28,13 +36,9 @@ while (loop != 2):
 
                 answer = input("Do you want to change something ?")
                 if answer == "yes":
-                    lo = open('misc.txt', 'w')
                     location = input("What is the location ? : ")
-                    lo.write(location)
-                    lo.write("\n")
-                    leftovers = input("Is there any leftovers ? : ")
-                    lo.write(leftovers)
-                    lo.close()
+                    leftovers = input("\nIs there any leftovers ? : ")
+                    changeLoc(location, leftovers)
         os.system('cls')
         while changepass != "Yes" or changepass != "No":
             changepass = input("Do you want to change your password ? : (Yes/No) ")
@@ -52,13 +56,7 @@ while (loop != 2):
         f = open('data.txt', 'w')
         f.write(login)
         f.close()
-        lo = open('misc.txt', 'a')
         location = input("What is the location ? : ")
-        lo.write(location)
-        lo.write("\n")
         leftovers = input("\nIs there any leftovers ? : ")
-        lo.write(leftovers)
-        lo.write("\n")
-        lo.close()
-
+        changeLoc(location, leftovers)
 
