@@ -11,7 +11,7 @@ def changeloc(location, leftovers):
         lo.write(leftovers)
         lo.write("\n")
         lo.close()
-def passwordGen(password, salt):
+def passwordgen(password, salt):
     f = open('data.txt', 'wb')
     hashed_password = bcrypt.hashpw(password, salt)
     f.write(hashed_password)
@@ -35,38 +35,39 @@ while loop != 2:
         while valid != True:
             trypass = input("Enter your password : ")
             valid = bcrypt.checkpw(trypass.encode('utf8'), login.encode('utf8'))
-            if valid != True:
+            if not valid:
                 print("Incorrect !")
-
             else:
                 print("Correct !")
                 os.system('cls')
                 lo = open('misc.txt', 'r')
-                locshow = lo.readlines()
-                print(locshow)
+                locshow = lo.readlines(1)
+                print("The location is :", locshow)
+                leftshow = lo.readlines(2)
+                print("There is ", leftshow, "leftovers")
 
                 answer = input("Do you want to change something ?")
-                if answer == "yes":
-                    location = input("What is the location ? : ")
-                    leftovers = input("\nIs there any leftovers ? : ")
-                    changeloc(location, leftovers)
-        os.system('cls')
-        while changepass != "Yes" or changepass != "No" or changepass != "yes" or changepass != "no":
-            changepass = input("Do you want to change your password ? : (Yes/No) ")
-            if changepass == "Yes" or changepass == "yes":
-                password = input("pswrd").encode('utf8')
-                salt = bcrypt.gensalt()
-                passwordGen(password, salt)
-                sys.exit()
-            elif changepass == "No" or changepass == "no":
-                loop = 2
-                sys.exit()
+                if answer == "yes" or answer == "yes":
+                    answer2 = ""
+                    while answer2 > "3" or answer2 < "1":
+                        print("Change location ..........(1)")
+                        print("Change password ..........(2)")
+                        print("Exit......................(3)")
+                        answer2 = input()
+                    if answer2 == "1":
+                        location = input("What is the location ? : ")
+                        leftovers = input("\nIs there any leftovers ? : ")
+                        changeloc(location, leftovers)
+                    elif answer2 == "2":
+                        password = input("Enter your new password : ").encode('utf8')
+                        salt = bcrypt.gensalt()
+                        passwordgen(password, salt)
+                        sys.exit()
 # aks the user the secret phrase to access if it's the first time skip this step
     else:
-        password = input("pswrd").encode('utf8')
+        password = input("Please type your new password : ").encode('utf8')
         salt = bcrypt.gensalt()
-        passwordGen(password, salt)
+        passwordgen(password, salt)
         location = input("What is the location ? : ")
         leftovers = input("\nIs there any leftovers ? : ")
         changeloc(location, leftovers)
-
