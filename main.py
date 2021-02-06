@@ -48,21 +48,25 @@ while loop != 2:
 
                 answer = input("Do you want to change something ?")
                 if answer == "yes" or answer == "yes":
-                    answer2 = ""
-                    while answer2 > "3" or answer2 < "1":
+                    answer2 = 0
+                    while answer2 > 3 or answer2 < 1:
                         print("Change location ..........(1)")
                         print("Change password ..........(2)")
                         print("Exit......................(3)")
-                        answer2 = input()
-                    if answer2 == "1":
+                        answer2 = int(input())
+                    if answer2 == 1:
                         location = input("What is the location ? : ")
                         leftovers = input("\nIs there any leftovers ? : ")
                         changeloc(location, leftovers)
-                    elif answer2 == "2":
+                    elif answer2 == 2:
                         password = input("Enter your new password : ").encode('utf8')
                         salt = bcrypt.gensalt()
                         passwordgen(password, salt)
+
+                    elif answer2 ==3:
                         sys.exit()
+                else:
+                    sys.exit()
 # aks the user the secret phrase to access if it's the first time skip this step
     else:
         password = input("Please type your new password : ").encode('utf8')
