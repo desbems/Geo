@@ -6,10 +6,8 @@ import bcrypt
 
 def changeloc(location, leftovers):
         lo = open('misc.txt', 'w')
-        lo.write(location)
-        lo.write("\n")
+        lo.write(location, "\n")
         lo.write(leftovers)
-        lo.write("\n")
         lo.close()
 def passwordgen(password, salt):
     f = open('data.txt', 'wb')
@@ -40,11 +38,11 @@ while loop != 2:
             else:
                 print("Correct !")
                 os.system('cls')
-                lo = open('misc.txt', 'r')
-                locshow = lo.readlines(1)
-                print("The location is :", locshow)
-                leftshow = lo.readlines(2)
-                print("There is ", leftshow, "leftovers")
+                with open('misc.txt', 'r') as reader:
+                    locshow = reader.read(1)
+                    print(f"The location is : {locshow}")
+                    leftshow = reader.read(2)
+                    print(f"There is : {leftshow} leftovers")
 
                 answer = input("Do you want to change something ?")
                 if answer == "yes" or answer == "yes":
