@@ -1,21 +1,26 @@
-import sys
+from os import system
 import os
+import sys
 import bcrypt
-
-
-
-def changeloc(location, leftovers):
-        lo = open('misc.txt', 'w')
-        lo.write(location, "\n")
-        lo.write(leftovers)
-        lo.close()
+import sqlite3
+# initializing
+connection = sqlite3.connect('location.db')
+cursor = connection.cursor()
+# create tables
+command1 = """CREATE TABLE IF NOT EXISTS locations(location_id, real_loc TEXT, leftovers TEXT)"""
+cursor.execute(command1)
+n = 1
+def printLoc():
+        cursor.execute("SELECT * FROM locations")
+        result = cursor.fetchall()
+        print(result)
+        print("id, location, still there")
 def passwordgen(password, salt):
     f = open('data.txt', 'wb')
     hashed_password = bcrypt.hashpw(password, salt)
     f.write(hashed_password)
     f.close()
 
-# initializing
 
 correct = False
 loop = 0
@@ -38,11 +43,7 @@ while loop != 2:
             else:
                 print("Correct !")
                 os.system('cls')
-                with open('misc.txt', 'r') as reader:
-                    locshow = reader.read(1)
-                    print(f"The location is : {locshow}")
-                    leftshow = reader.read(2)
-                    print(f"There is : {leftshow} leftovers")
+                printLoc()
 
                 answer = input("Do you want to change something ?")
                 if answer == "yes" or answer == "yes":
@@ -53,9 +54,14 @@ while loop != 2:
                         print("Exit......................(3)")
                         answer2 = int(input())
                     if answer2 == 1:
+                        system('cls')
                         location = input("What is the location ? : ")
-                        leftovers = input("\nIs there any leftovers ? : ")
-                        changeloc(location, leftovers)
+                        leftovers = input("\nIs it still there ? : ")
+                        system('cls')
+                        printLoc()
+                        n = int(input("Enter the number of the line you want to change, enter a new one if you want to create a new one"))
+                        cursor.execute("insert into locations (location_id, realoc, leftovers) values (?, ?, ?)", (n, location, leftovers))
+                        connection.commit()
                     elif answer2 == 2:
                         password = input("Enter your new password : ").encode('utf8')
                         salt = bcrypt.gensalt()
@@ -71,5 +77,6 @@ while loop != 2:
         salt = bcrypt.gensalt()
         passwordgen(password, salt)
         location = input("What is the location ? : ")
-        leftovers = input("\nIs there any leftovers ? : ")
-        changeloc(location, leftovers)
+        leftovers = input("Is it still there ? : ")
+        cursor.execute("insert into locations (location_id, real_loc, leftovers) values (?, ?, ?)", (n, location, leftovers))
+        connection.commit()
