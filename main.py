@@ -1,21 +1,26 @@
-import sys
+from os import system
 import os
+import sys
 import bcrypt
+import sqlite3
+# initializing
+connection = sqlite3.connect('location.db')
+cursor = connection.cursor()
+# create tables
+command1 = """CREATE TABLE IF NOT EXISTS locations(id integer primary key, real_loc TEXT, leftovers TEXT)"""
+cursor.execute(command1)
+select_id = 0
 
-
-
-def changeloc(location, leftovers):
-        lo = open('misc.txt', 'w')
-        lo.write(location, "\n")
-        lo.write(leftovers)
-        lo.close()
+def printLoc():
+        cursor.execute("SELECT * FROM locations")
+        [print(result) for result in cursor.fetchall()]
+        print("id, location, still there")
 def passwordgen(password, salt):
     f = open('data.txt', 'wb')
     hashed_password = bcrypt.hashpw(password, salt)
     f.write(hashed_password)
     f.close()
 
-# initializing
 
 correct = False
 loop = 0
@@ -38,30 +43,42 @@ while loop != 2:
             else:
                 print("Correct !")
                 os.system('cls')
-                with open('misc.txt', 'r') as reader:
-                    locshow = reader.read(1)
-                    print(f"The location is : {locshow}")
-                    leftshow = reader.read(2)
-                    print(f"There is : {leftshow} leftovers")
+                printLoc()
 
                 answer = input("Do you want to change something ?")
                 if answer == "yes" or answer == "yes":
                     answer2 = 0
                     while answer2 > 3 or answer2 < 1:
                         print("Change location ..........(1)")
-                        print("Change password ..........(2)")
-                        print("Exit......................(3)")
+                        print("Add a new location .......(2)")
+                        print("Change password ..........(3)")
+                        print("Exit......................(4)")
                         answer2 = int(input())
                     if answer2 == 1:
+                        system('cls')
+                        printLoc()
+                        row = int(input("what row you want to change ?"))
                         location = input("What is the location ? : ")
-                        leftovers = input("\nIs there any leftovers ? : ")
-                        changeloc(location, leftovers)
+                        leftovers = input("Is it still there ? : ")
+                        system('cls')
+                        cursor.execute("UPDATE locations SET real_loc = (?) WHERE id = (?)", (location, row))
+                        cursor.execute("UPDATE locations SET leftovers = (?) WHERE id = (?)", (leftovers, row))
+                        printLoc()
+                        connection.commit()
                     elif answer2 == 2:
+                        system('cls')
+                        printLoc()
+                        location = input("What is the location ? : ")
+                        leftovers = input("Is it still there ? : ")
+                        cursor.execute("insert into locations (real_loc, leftovers) values (?, ?)", (location, leftovers))
+                        connection.commit()
+                        system('cls')
+                    elif answer2 == 3:
                         password = input("Enter your new password : ").encode('utf8')
                         salt = bcrypt.gensalt()
                         passwordgen(password, salt)
-
-                    elif answer2 ==3:
+                        system('cls')
+                    elif answer2 ==4:
                         sys.exit()
                 else:
                     sys.exit()
@@ -71,5 +88,7 @@ while loop != 2:
         salt = bcrypt.gensalt()
         passwordgen(password, salt)
         location = input("What is the location ? : ")
-        leftovers = input("\nIs there any leftovers ? : ")
-        changeloc(location, leftovers)
+        leftovers = input("Is it still there ? : ")
+        cursor.execute("insert into locations (real_loc, leftovers) values (?, ?)", (location, leftovers))
+        connection.commit()
+        system('cls')
