@@ -1,2 +1,6 @@
 Welcome to my project
-bcrypt is needed, but im planning to change that at some point
+At the moment bcrypt and pretty tables are needed
+
+pip install prettytable
+pip install bcrypt
+
