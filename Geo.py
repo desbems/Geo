@@ -3,6 +3,7 @@ import os
 import sys
 import bcrypt
 import sqlite3
+from prettytable import from_db_cursor
 # initializing and creating db if not present
 connection = sqlite3.connect('location.db')
 cursor = connection.cursor()
@@ -10,22 +11,23 @@ cursor = connection.cursor()
 command1 = """CREATE TABLE IF NOT EXISTS locations(id integer primary key, real_loc TEXT, leftovers TEXT)"""
 cursor.execute(command1)
 
-def changeLoc():
-    location = input("What is the location ? : ")
-    leftovers = input("Is it still there ? : ")
-    cursor.execute("insert into locations (real_loc, leftovers) values (?, ?)", (location, leftovers))
-    connection.commit()
+################### Definitions #################################
+def changeLoc(): #SQL command creating a row
+        location = input("What is the location ? : ")
+        leftovers = input("Is it still there ? : ")
+        cursor.execute("insert into locations (real_loc, leftovers) values (?, ?)", (location, leftovers))
+        connection.commit()
 
-def printLoc():
-        cursor.execute("SELECT * FROM locations")
-        [print(result) for result in cursor.fetchall()]
-        print("id, location, still there")
+def printLoc(): #SQL command for printing the db
+        cursor.execute('SELECT * FROM locations')
+        x = from_db_cursor(cursor)
+        print(x)
 def passwordgen(password, salt):
-    f = open('data.txt', 'wb')
-    hashed_password = bcrypt.hashpw(password, salt)
-    f.write(hashed_password)
-    f.close()
-
+        f = open('data.txt', 'wb')
+        hashed_password = bcrypt.hashpw(password, salt)
+        f.write(hashed_password)
+        f.close()
+##################################################################
 
 correct = False
 loop = 0
@@ -67,6 +69,7 @@ while loop != 2:
                         location = input("What is the location ? : ")
                         leftovers = input("Is it still there ? : ")
                         system('cls')
+                        # SQL command : Updating a row
                         cursor.execute("UPDATE locations SET real_loc = (?) WHERE id = (?)", (location, row))
                         cursor.execute("UPDATE locations SET leftovers = (?) WHERE id = (?)", (leftovers, row))
                         printLoc()
