@@ -29,6 +29,10 @@ def passwordgen(password, salt):
         hashed_password = bcrypt.hashpw(password, salt)
         f.write(hashed_password)
         f.close()
+def deleteRecord():
+        id = input("Which record do you want to delete (type the id) : ")
+        cursor.execute("DELETE FROM locations WHERE id = (?)", (id))
+        connection.commit()
 ##################################################################
 
 correct = False
@@ -58,11 +62,12 @@ while loop != 2:
                 answer = input("Do you want to change something ? ")
                 if answer.upper() == "YES":
                     answer2 = 0
-                    while answer2 > 4 or answer2 < 1:
+                    while answer2 > 5 or answer2 < 1:
                         print("Change location ..........(1) ")
                         print("Add a new location .......(2) ")
                         print("Change password ..........(3) ")
-                        print("Exit......................(4) ")
+                        print("Delete a record...........(4) ")
+                        print("Exit......................(5) ")
                         answer2 = int(input())
                     if answer2 == 1:
                         system('cls')
@@ -87,6 +92,11 @@ while loop != 2:
                         passwordgen(password, salt)
                         system('cls')
                     elif answer2 == 4:
+                        printLoc()
+                        deleteRecord()
+                        system('cls')
+                        printLoc()
+                    elif answer2 == 5:
                         sys.exit()
                 else:
                     sys.exit()
