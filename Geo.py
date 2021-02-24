@@ -13,7 +13,7 @@ cursor = connection.cursor()
 command1 = """CREATE TABLE IF NOT EXISTS locations(id integer primary key, real_loc TEXT, leftovers TEXT)"""
 cursor.execute(command1)
 
-################### Definitions #################################
+################### Definitions ##################################
 def changeLoc(): #SQL command creating a row
         location = input("What is the location ? : ")
         leftovers = input("Is it still there ? : ")
