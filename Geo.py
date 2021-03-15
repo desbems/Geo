@@ -5,19 +5,20 @@ import os
 import sys
 import bcrypt
 import sqlite3
+import getpass
 from prettytable import from_db_cursor
 # initializing and creating db if not present
 connection = sqlite3.connect('location.db')
 cursor = connection.cursor()
 # creating tables
-command1 = """CREATE TABLE IF NOT EXISTS locations(id integer primary key, real_loc TEXT, leftovers TEXT)"""
+command1 = """CREATE TABLE IF NOT EXISTS locations(id integer primary key, Locations TEXT, leftovers TEXT)"""
 cursor.execute(command1)
 
 ################### Definitions ##################################
 def changeLoc(): #SQL command creating a row
         location = input("What is the location ? : ")
         leftovers = input("Is it still there ? : ")
-        cursor.execute("insert into locations (real_loc, leftovers) values (?, ?)", (location, leftovers))
+        cursor.execute("insert into locations (Locations, leftovers) values (?, ?)", (location, leftovers))
         connection.commit()
 
 def printLoc(): #SQL command for printing the db
@@ -50,7 +51,7 @@ while loop != 2:
 # loop until password is not a match
         valid = False
         while valid != True:
-            trypass = input("Enter your password : ")
+            trypass = getpass.getpass("Enter your password : ")
             valid = bcrypt.checkpw(trypass.encode('utf8'), login.encode('utf8'))
             if not valid:
                 print("Incorrect !")
@@ -77,7 +78,7 @@ while loop != 2:
                         leftovers = input("Is it still there ? : ")
                         system('cls')
                         # SQL command : Updating a row
-                        cursor.execute("UPDATE locations SET real_loc = (?) WHERE id = (?)", (location, row))
+                        cursor.execute("UPDATE locations SET Locations = (?) WHERE id = (?)", (location, row))
                         cursor.execute("UPDATE locations SET leftovers = (?) WHERE id = (?)", (leftovers, row))
                         printLoc()
                         connection.commit()
@@ -102,7 +103,7 @@ while loop != 2:
                     sys.exit()
 # aks the user the secret phrase to access if it's the first time skip this step
     else:
-        password = input("Please type your new password : ").encode('utf8')
+        password = getpass.getpass("Please type your new password : ").encode('utf8')
         salt = bcrypt.gensalt()
         passwordgen(password, salt)
         changeLoc()

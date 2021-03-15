@@ -1,0 +1,6 @@
+bcrypt==3.2.0
+cffi==1.14.5
+prettytable==2.1.0
+pycparser==2.20
+six==1.15.0
+wcwidth==0.2.5
